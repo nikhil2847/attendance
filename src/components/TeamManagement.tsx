@@ -1,1 +1,10 @@
-I cannot generate the complete file content because the original file content provided is empty. To properly apply a diff, I need the original file content that the diff is meant to modify. The diff shows changes that should be applied to an existing file, but no original content was provided for me to work with.
+const [showAddMemberModal, setShowAddMemberModal] = useState(false);
+const [addMemberType, setAddMemberType] = useState<'invite' | 'create'>('invite');
+const [editingRate, setEditingRate] = useState<{ id: number; rate: number } | null>(null);
+const [showPasswordReset, setShowPasswordReset] = useState<{ id: number; name: string } | null>(null);
+const [newPassword, setNewPassword] = useState('');
+const [inviteForm, setInviteForm] = useState({
+  email: '',
+  role: 'employee',
+}
+)
