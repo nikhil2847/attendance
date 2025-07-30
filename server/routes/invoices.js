@@ -2,7 +2,7 @@
  // export default router;
  module.exports = router;
 +
-+// Delete invoice
+// Delete invoice
 +router.delete('/:invoiceId', requireManager, async (req, res) => {
 +  try {
 +    const { invoiceId } = req.params;
