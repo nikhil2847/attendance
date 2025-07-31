@@ -531,16 +531,25 @@ const TeamManagement: React.FC = () => {
                       {formatDate(member.created_at)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => setShowPasswordReset({
-                          id: member.id,
-                          name: `${member.first_name} ${member.last_name}`
-                        })}
-                        className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
-                      >
-                        <Key className="h-4 w-4" />
-                        <span>Reset Password</span>
-                      </button>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => setShowPasswordReset({
+                            id: member.id,
+                            name: `${member.first_name} ${member.last_name}`
+                          })}
+                          className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+                        >
+                          <Key className="h-4 w-4" />
+                          <span>Reset Password</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteUser(member.id, `${member.first_name} ${member.last_name}`)}
+                          className="flex items-center space-x-1 px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          <span>Delete</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
