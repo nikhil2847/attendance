@@ -82,5 +82,48 @@ router.put('/:userId/reset-password', requireManager, async (req, res) => {
   }
 });
 
+// Delete user (manager only)
+router.delete('/:userId', requireManager, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const organizationId = req.user.organization_id;
+
+    // Check if user exists and belongs to organization
+    const [users] = await db.execute(
+      'SELECT id, role FROM users WHERE id = ? AND organization_id = ?',
+      [userId, organizationId]
+    );
+
+    if (users.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = users[0];
+
+    // Prevent deleting the last manager
+    if (user.role === 'manager') {
+      const [managers] = await db.execute(
+        'SELECT COUNT(*) as count FROM users WHERE organization_id = ? AND role = "manager" AND is_active = 1',
+        [organizationId]
+      );
+
+      if (managers[0].count <= 1) {
+        return res.status(400).json({ error: 'Cannot delete the last manager of the organization' });
+      }
+    }
+
+    // Delete user (this will cascade delete attendance records due to foreign key)
+    await db.execute(
+      'DELETE FROM users WHERE id = ? AND organization_id = ?',
+      [userId, organizationId]
+    );
+
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // export default router;
 module.exports = router;

@@ -202,6 +202,67 @@ class ApiService {
     });
   }
 
+  // Attendance Management (Manager only)
+  async createAttendanceRecord(data: {
+    userId: number;
+    checkIn: string;
+    checkOut?: string;
+    notes?: string;
+  }) {
+    return this.request('/attendance/create', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateAttendanceRecord(attendanceId: number, data: {
+    checkIn: string;
+    checkOut?: string;
+    notes?: string;
+  }) {
+    return this.request(`/attendance/${attendanceId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteAttendanceRecord(attendanceId: number) {
+    return this.request(`/attendance/${attendanceId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // User Management (Manager only)
+  async deleteUser(userId: number) {
+    return this.request(`/users/${userId}`, {
+      method: 'DELETE',
+    });
+  }
+  async deleteInvoice(invoiceId: number) {
+    return this.request(`/invoices/${invoiceId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async resetPassword(data: {
+    organizationName: string;
+    email: string;
+    oldPassword: string;
+    newPassword: string;
+  }) {
+    return this.request('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async resetUserPassword(userId: number, newPassword: string) {
+    return this.request(`/users/${userId}/reset-password`, {
+      method: 'PUT',
+      body: JSON.stringify({ newPassword }),
+    });
+  }
+
 
 }
 
