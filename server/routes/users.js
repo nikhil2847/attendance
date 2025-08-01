@@ -1,7 +1,3 @@
-// const express = require('express');
-// import express from 'express';
-// import db from '../config/database.js';
-// import { requireManager } from '../middleware/auth.js';
 const express = require('express');
 const db = require('../config/database.js');
 const { requireManager } = require('../middleware/auth.js');
@@ -125,5 +121,4 @@ router.delete('/:userId', requireManager, async (req, res) => {
   }
 });
 
-// export default router;
 module.exports = router;

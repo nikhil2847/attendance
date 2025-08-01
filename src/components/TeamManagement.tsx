@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../services/api';
-import { UserPlus, Mail, Users, Edit2, Check, X, Key } from 'lucide-react';
+import { UserPlus, Mail, Users, Edit2, Check, X, Key, Trash2 } from 'lucide-react';
 
 interface TeamMember {
   id: number;
@@ -116,6 +116,18 @@ const TeamManagement: React.FC = () => {
     }
   };
 
+  const handleDeleteUser = async (userId: number, userName: string) => {
+    if (window.confirm(`Are you sure you want to delete ${userName}? This action cannot be undone and will remove all their attendance records.`)) {
+      try {
+        await apiService.deleteUser(userId);
+        alert(`${userName} has been deleted successfully!`);
+        fetchMembers(); // Refresh the list
+      } catch (error: any) {
+        alert(error.message || 'Failed to delete user');
+      }
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
@@ -168,20 +180,6 @@ const TeamManagement: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-purple-100">
-              <DollarSign className="h-6 w-6 text-purple-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Avg. Hourly Rate</p>
-              <p className="text-2xl font-semibold text-gray-900">
-                ${members.length > 0 ? (members.reduce((sum, m) => sum + m.hourly_rate, 0) / members.length).toFixed(0) : '0'}
-              </p>
-            </div>
-          </div>
-        </div> */}
       </div>
 
       {/* Password Reset Modal */}
