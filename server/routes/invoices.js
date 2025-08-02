@@ -13,12 +13,24 @@ const router = express.Router();
 
 // Generate invoice number
 const generateInvoiceNumber = async (organizationId) => {
+  // Get the highest invoice number for this organization to avoid duplicates
   const [result] = await db.execute(
-    'SELECT COUNT(*) as count FROM invoices WHERE organization_id = ?',
+    `SELECT invoice_number FROM invoices 
+     WHERE organization_id = ? 
+     ORDER BY id DESC 
+     LIMIT 1`,
     [organizationId]
   );
-  const count = result[0].count + 1;
-  return `INV-${organizationId.toString().padStart(3, '0')}-${count.toString().padStart(4, '0')}`;
+  
+  let nextNumber = 1;
+  if (result.length > 0) {
+    // Extract the number from the last invoice (e.g., "INV-007-0003" -> 3)
+    const lastInvoiceNumber = result[0].invoice_number;
+    const lastNumber = parseInt(lastInvoiceNumber.split('-')[2]);
+    nextNumber = lastNumber + 1;
+  }
+  
+  return `INV-${organizationId.toString().padStart(3, '0')}-${nextNumber.toString().padStart(4, '0')}`;
 };
 
 // Create invoice
