@@ -129,7 +129,7 @@ const InvoiceManagement: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return moment.utc(dateString).tz('America/New_York').format('MMM D, YYYY');
+    return moment(dateString).format('MMM D, YYYY');
   };
 
   const formatCurrency = (amount: number) => {
