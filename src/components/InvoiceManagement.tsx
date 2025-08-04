@@ -3,6 +3,7 @@ import { apiService } from '../services/api';
 import { Invoice } from '../types';
 import { FileText, Plus, Calendar, User, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import moment from 'moment-timezone';
 
 const InvoiceManagement: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -128,11 +129,7 @@ const InvoiceManagement: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
+    return moment.utc(dateString).tz('America/New_York').format('MMM D, YYYY');
   };
 
   const formatCurrency = (amount: number) => {
